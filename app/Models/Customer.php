@@ -12,7 +12,7 @@ class Customer extends Model
     protected $fillable = ['name','connum','address', 'email'];
 
     public function rent() {
-        return $this->hasMany(Rents::class);
+        return $this->hasMany(Rent::class);
     }
 
     public static function list(){

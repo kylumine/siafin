@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 use App\Models\Rent;
 use App\Models\Customer;
+use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Http\Request;
 
 class RentController extends Controller
@@ -62,4 +63,38 @@ class RentController extends Controller
 
         return redirect('/rent')->with('info', "Rent with the ID# $rent->id has been deleted successfully");
     }
+
+    public function generateCSV() {
+        $rent = Rent::orderBy('rents.id')
+                    ->join('customers', 'rents.customer_id', '=', 'customers.id')
+                    ->select('rents.*', 'customers.name as customer_name')
+                    ->get();
+    
+        $filename = '../storage/rents.csv';
+    
+        $file = fopen($filename, 'w+');
+    
+ 
+        foreach($rent as $o) {
+            fputcsv($file, [
+                $o->customer_name, 
+                $o->total,
+                $o->rented_on,
+                $o->return_by,
+            ]);
+        }
+        fclose($file);
+    
+        return response()->download($filename);
+    }
+
+    public function pdf() {
+        $rent = Rent::orderBy('id')->get();
+
+        $pdf = Pdf::loadView('rent.pdf', compact('rent'));
+
+        return $pdf->download('rent.pdf');
+    }
+
+    
 }

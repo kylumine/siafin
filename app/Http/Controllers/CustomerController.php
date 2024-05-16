@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers;
 use App\Models\Customer;
+use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
 
 class CustomerController extends Controller
 {
@@ -51,21 +53,89 @@ class CustomerController extends Controller
         return redirect('/customer')->with('info', "Customer with the ID# $customer->id has been updated.");
     }
 
-    // public function destroy($id) {
-    //     $data = Customer::find($id);
-    
-    //     if (!$data) {
-    //         return response()->json(['info' => 'Data not found'], 404);
-    //     }
-    
-    //     $data->delete();
-    
-    //     return redirect('/customer')->with('info', 'Customer Deleted successfully');
-    // }
 
     public function delete(Customer $customer) {
         $customer->delete();
 
         return redirect('/customer')->with('info', "Customer with the ID# $customer->id has been deleted successfully");
     }
+
+    public function generateCSV() {
+        $customer = Customer::orderBy('id')->get();
+
+        $filename = '../storage/customers.csv';
+
+        $file = fopen($filename, 'w+');
+
+        foreach($customer as $o) {
+            fputcsv($file, [
+                $o->name,
+                $o->connum,
+                $o->address,
+                $o->email
+            ]);
+        }
+        fclose($file);
+
+        return response()->download($filename);
+    }
+
+    public function pdf() {
+        $customer = Customer::orderBy('id')->get();
+
+        $pdf = Pdf::loadView('customer.pdf', compact('customer'));
+
+        return $pdf->download('customer.pdf');
+    }
+
+    public function importCSV(Request $request)
+    {
+        try {
+            $request->validate([
+                'csv_file' => 'required|mimes:csv,txt|max:2048' // Validate the uploaded file
+            ]);
+
+            $file = $request->file('csv_file'); // Get the uploaded file
+            $csvData = file_get_contents($file); // Read the file content
+
+            // Parse the CSV data
+            $rows = array_map('str_getcsv', explode("\n", $csvData));
+            
+            // Remove the header row
+            array_shift($rows);
+
+            // Loop through each row and create a new Customer instance
+            foreach ($rows as $row) {
+                // Validate row data
+                $validator = Validator::make([
+                    'name' => $row[0] ?? null,
+                    'connum' => $row[1] ?? null,
+                    'address' => $row[2] ?? null,
+                    'email' => $row[3] ?? null
+                ], [
+                    'name' => 'required',
+                    'connum' => 'required',
+                    'address' => 'required',
+                    'email' => 'required'
+                ]);
+
+                if ($validator->fails()) {
+                    continue; // Skip invalid rows
+                }
+
+                // Create a new Customer instance and save it to the database
+                Customer::create([
+                    'name' => $row[0],
+                    'connum' => $row[1],
+                    'address' => $row[2],
+                    'email' => $row[3]
+                ]);
+            }
+
+            return redirect('/customer')->with('info', 'CSV file imported successfully.');
+        } catch (\Exception $e) {
+            dd($e->getMessage()); // Log and display any exceptions
+        }
+    }
+    
 }

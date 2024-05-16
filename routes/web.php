@@ -1,6 +1,7 @@
 <?php
 use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\MovieController;
+use App\Http\Controllers\QRScannerController;
 use App\Http\Controllers\RentController;
 use App\Http\Controllers\RentDetailController;
 use Illuminate\Support\Facades\Route;
@@ -19,12 +20,11 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', function () {
     return view('base');
 });
-// Route::get('/customer', function () {
-//     return view('customer');
+
+// Route::get('/scanner', function () {
+//     return view('scanner');
 // });
-Route::get('/home', function () {
-    return view('base');
-});
+
 
 Route::get('/customer', [CustomerController::class,'view'])->name('customer');
 Route::get('/customer/create', [CustomerController::class,'create']);
@@ -55,3 +55,20 @@ Route::post('/rentdetail/create', [RentDetailController::class,'store']);
 Route::get('/rentdetail/{rentdetail}', [RentDetailController::class,'edit']);
 Route::post('/rentdetail/{rentdetail}', [RentDetailController::class,'update']);
 Route::delete('rentdetail/delete/{rentdetail}', [RentDetailController::class, 'delete']);
+
+Route::get('/movies/csv-all', [MovieController::class, 'generateCSV']);
+Route::get('movies/pdf', [MovieController::class, 'pdf']);
+Route::post('/movies/import-csv', [MovieController::class, 'importCSV'])->name('movies.import-csv');
+
+Route::get('/customers/csv-all', [CustomerController::class, 'generateCSV']);
+Route::get('customers/pdf', [CustomerController::class, 'pdf']);
+Route::post('/customers/import-csv', [CustomerController::class, 'importCSV'])->name('customers.import-csv');
+
+Route::get('/rents/csv-all', [RentController::class, 'generateCSV']);
+Route::get('rents/pdf', [RentController::class, 'pdf']);
+
+Route::get('/rentdetails/csv-all', [RentDetailController::class, 'generateCSV']);
+Route::get('rentdetails/pdf', [RentDetailController::class, 'pdf']);
+
+Route::get('/scanner', [QRScannerController::class, 'index']);
+Route::post('/qr-scan-result', [QRScannerController::class, 'scanResult']);

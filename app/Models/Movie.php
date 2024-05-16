@@ -9,10 +9,10 @@ class Movie extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['title','genre','rate_per_day'];
+    protected $fillable = ['title','genre','rate_per_day', 'imageUrl'];
 
     public function RentDetail() {
-        return $this->hasMany(RentDetails::class);
+        return $this->hasMany(RentDetail::class);
     }
 
     public static function list(){

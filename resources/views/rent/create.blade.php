@@ -42,6 +42,9 @@
             @enderror
             </div>
             <div class="form-group my-3 d-grid gap-2 d-md-flex justify-content-end">
+                <a href="{{url('/rent')}}" class='btn btn-danger mo-md-2' type='button'>
+                    Back
+                </a>
                 <button class="btn btn-primary">
                     Add Rent
                 </button>

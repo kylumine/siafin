@@ -32,6 +32,13 @@
             <form action="{{url('movie/'.$movie->id)}}" method="POST">
             @csrf 
             <div class="form-group mt-2">
+              <label for="imageUrl"> Image </label>
+              <input type="text" name='imageUrl' class='form-control' value='{{$movie->imageUrl}}'>
+              @error('imageUrl')
+                  <p class='text-danger'>{{$message}}</p>
+              @enderror
+          </div>
+            <div class="form-group mt-2">
                 <label for="title"> Title </label>
                 <input type="text" name='title' class='form-control' value='{{$movie->title}}'>
                 @error('title')

@@ -16,6 +16,7 @@ return new class extends Migration
             $table->string('title');
             $table->string('genre');
             $table->decimal('rate_per_day');
+            $table->string('imageUrl');
             $table->timestamps();
         });
     }

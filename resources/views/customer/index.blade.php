@@ -6,10 +6,26 @@
     <div class="alert alert-success">{{session('info')}}</div>
 @endif
 
-    <div class='d-grip gap-2 d-md-flex justify-content-md-end mb-3'>
+    <div class='d-grip gap-2 d-md-flex justify-content-between mb-3'>
         <a href="{{url('/customer/create')}}" class='btn btn-pink mo-md-2' type='button'>
             Add New Customer
         </a>
+        <div class="text-md-end">
+            <a href="#" class='btn btn-pink1 mo-md-2 import-csv-btn' type='button'>
+                Import CSV
+            </a>
+            <form action="{{ route('customers.import-csv') }}" method="POST" enctype="multipart/form-data" style="display: none;">
+                @csrf
+                <input type="file" name="csv_file" id="csv_file" accept=".csv" style="display: none;">
+                <button type="submit" class="btn btn-pink1 mo-md-2">Submit</button>
+            </form>
+            <a href="/customers/csv-all" class='btn btn-pink1 mo-md-2' type='button'>
+                Generate CSV
+            </a>
+            <a href="customers/pdf" class='btn btn-pink1 mo-md-2' type='button'>
+                Generate PDF
+            </a>
+        </div>
     </div>
 
     <div class="table">
@@ -50,6 +66,22 @@
                 <?php endforeach; ?>
         </tbody>
     </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            var importCsvBtn = document.querySelector('.import-csv-btn');
+            var fileInput = document.querySelector('#csv_file');
+    
+            importCsvBtn.addEventListener('click', function(event) {
+                event.preventDefault();
+                fileInput.click();
+            });
+    
+            fileInput.addEventListener('change', function() {
+                this.parentElement.submit();
+            });
+        });
+    </script>
 
 @endsection
 </body>

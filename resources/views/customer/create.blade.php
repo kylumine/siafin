@@ -22,6 +22,13 @@
             @enderror
             </div>
             <div class="form-group mt-2">
+                <label for="address"> Address </label>
+                <input type="text" name='address' class='form-control'>
+                @error('address')
+                <p class='text-danger'>{{$message}}</p>
+            @enderror
+            </div>
+            <div class="form-group mt-2">
                 <label for="email"> Email </label>
                 <input type="text" name='email' class='form-control'>
                 @error('email')
@@ -29,6 +36,9 @@
             @enderror
             </div>
             <div class="form-group my-3 d-grid gap-2 d-md-flex justify-content-end">
+                <a href="{{url('/customer')}}" class='btn btn-danger mo-md-2' type='button'>
+                    Back
+                </a>
                 <button class="btn btn-primary">
                     Add Customer
                 </button>

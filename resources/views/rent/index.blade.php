@@ -6,11 +6,19 @@
     <div class="alert alert-success">{{session('info')}}</div>
 @endif
 
-    <div class='d-grip gap-2 d-md-flex justify-content-md-end mb-3'>
-        <a href="{{url('/rent/create')}}" class='btn btn-pink mo-md-2' type='button'>
-            New Rent
+<div class='d-grip gap-2 d-md-flex justify-content-between mb-3'>
+    <a href="{{ url('/rent/create') }}" class='btn btn-pink mo-md-2' type='button'>
+        Add New Rent
+    </a>
+    <div class="text-md-end">
+        <a href="/rents/csv-all" class='btn btn-pink1 mo-md-2' type='button'>
+            Generate CSV
+        </a>
+        <a href="{{ url('/rents/pdf') }}" class='btn btn-pink1 mo-md-2' type='button'>
+            Generate PDF
         </a>
     </div>
+</div>
 
     <div class="table">
         <table class="table table-bordered table-striped">
@@ -32,7 +40,7 @@
                     <td>{{$rent->customer->name}}</td>
                     <td>{{$rent->rented_on}}</td>
                     <td>{{$rent->return_by}}</td>
-                    <td>{{$rent->total}}</td>
+                    <td>₱{{$rent->total}}</td>
                     <td class='text-center'>
                         <a href='{{url('/rent/'.$rent->id)}}' class='btn btn-pink'>
                             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-pencil-square" viewBox="0 0 16 16">

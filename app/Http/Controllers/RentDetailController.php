@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 use App\Models\RentDetail;
 use App\Models\Rent;
 use App\Models\Movie;
+use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Http\Request;
 
 class RentDetailController extends Controller
@@ -76,4 +77,34 @@ class RentDetailController extends Controller
 
         return redirect('/rentdetail')->with('info', "Detail with the ID# $rentdetail->id has been deleted successfully");
     }
+
+
+    public function pdf() {
+        $rent = RentDetail::orderBy('id')->get();
+
+        $pdf = Pdf::loadView('detail.pdf', compact('rent'));
+
+        return $pdf->download('rentdetail.pdf');
+    }
+
+    public function generateCSV() {
+        $rentd = RentDetail::with(['rent.customer', 'movie'])->orderBy('id')->get();
+    
+        $filename = '../storage/rentdetails.csv';
+    
+        $file = fopen($filename, 'w+');
+    
+        foreach($rentd as $o) {
+            fputcsv($file, [
+                $o->rent->customer->name,
+                $o->movie->title,
+                $o->days_rented,
+                $o->total
+            ]);
+        }
+        fclose($file);
+    
+        return response()->download($filename);
+    }
+    
 }

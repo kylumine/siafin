@@ -7,9 +7,14 @@ use Illuminate\Http\Request;
 
 class RentApiController extends Controller
 {
-    public function index() {
-        $rents = Rent::orderBy('id')->get();
-
+    public function index(Request $request)
+    {
+        $includeCustomer = $request->query('include') === 'customer';
+    
+        $rents = $includeCustomer
+            ? Rent::with('customer')->get()
+            : Rent::all();
+    
         return response()->json($rents);
     }
 
@@ -40,7 +45,7 @@ class RentApiController extends Controller
             'total' => 'required|numeric|regex:/^\d+(\.\d{1,2})?$/',
             'rented_on' => 'required',
             'return_by' => 'nullable',
-            'customer_id' => 'required|exists:customer,id'
+            'customer_id' => 'required'
         ]);
     
         $rent = Rent::create($fields);

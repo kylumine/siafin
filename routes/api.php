@@ -39,7 +39,7 @@ Route::get('/rents/{rent}',[RentApiController::class, 'view']);
 Route::patch('/rents/{rent}',[RentApiController::class, 'update']);
 Route::put('/rents/{rent}',[RentApiController::class, 'update']);
 Route::delete('/rents/{rent}',[RentApiController::class, 'destroy']);
-Route::get('/rents',[RentApiController::class, 'index']);
+Route::get('/rents', [RentApiController::class, 'index']);
 Route::post('/rents',[RentApiController::class, 'store']);
 
 Route::get('/rentdetails/{rentDetail}',[RentDetailApiController::class, 'view']);

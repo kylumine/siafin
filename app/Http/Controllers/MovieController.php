@@ -104,7 +104,7 @@ class MovieController extends Controller
             $rows = array_map('str_getcsv', explode("\n", $csvData));
             
             // Remove the header row
-            array_shift($rows);
+            // array_shift($rows);
 
             // Loop through each row and create a new Movie instance
             foreach ($rows as $row) {

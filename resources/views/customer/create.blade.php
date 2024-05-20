@@ -2,7 +2,7 @@
 
 @section('content')
 
-    <h1>Add New Customer</h1>
+    <h1  class="create">Add New Customer</h1>
     <div class="row">
         <div class="col-md-5">
             <form action="{{url('customer/create')}}" method="POST">

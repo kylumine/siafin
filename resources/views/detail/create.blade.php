@@ -1,7 +1,7 @@
 @extends('home')
 
 @section('content')
-
+<h1>New Rent Detail</h1>
 <div class="row">
     <div class="col-md-5">
         <form action="{{url('rentdetail/create')}}" method="POST">

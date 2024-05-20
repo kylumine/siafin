@@ -2,7 +2,7 @@
 
 @section('content')
 
-    <h1>Add New Movie</h1>
+    <h1  class="create">Add New Movie</h1>
     <div class="row">
         <div class="col-md-5">
             <form action="{{url('movie/create')}}" method="POST">

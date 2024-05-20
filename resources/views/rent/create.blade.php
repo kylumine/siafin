@@ -2,7 +2,7 @@
 
 @section('content')
 
-    <h1>New Rent</h1>
+    <h1  class="create">New Rent</h1>
     <div class="row">
         <div class="col-md-5">
             <form action="{{url('rent/create')}}" method="POST">
